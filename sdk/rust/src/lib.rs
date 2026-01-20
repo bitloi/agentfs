@@ -635,7 +635,7 @@ impl AgentFS {
         // and truncates the WAL file
         let mut checkpoint_rows = conn.query("PRAGMA wal_checkpoint(TRUNCATE)", ()).await?;
         // Consume the result rows
-        while let Some(_) = checkpoint_rows.next().await? {}
+        while checkpoint_rows.next().await?.is_some() {}
 
         // Get the source database path by querying the database filename
         let mut rows = conn.query("PRAGMA database_list", ()).await?;
